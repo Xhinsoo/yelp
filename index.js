@@ -1,0 +1,7 @@
+const express = require("express");
+const app = express();
+const path = require("path");
+
+app.listen("3000", (req, res) => {
+  console.log("listening to port 3000");
+});
