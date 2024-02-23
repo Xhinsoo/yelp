@@ -53,6 +53,7 @@ app.get("/campground/:id/edit", async (req, res) => {
 
 //put update route
 app.put("/campground/:id", async (req, res) => {
+  
   const campground = await Campground.findByIdAndUpdate(
     req.params.id,
     req.body.campground
@@ -61,6 +62,7 @@ app.put("/campground/:id", async (req, res) => {
   res.redirect(`/campground/${campground._id}`);
 });
 
+//delete 
 app.delete("/campground/:id", async (req, res) => {
   const {id} = req.params
   const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
