@@ -14,19 +14,18 @@ mongoose
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
+//run nodemon on seed index.js file to update changes 
 const seedDB = async () => {
   await Campground.deleteMany({}); //deletes everything in DB and adds new locations
-  for (let i = 0; (i = 50); i++) {
+  for (let i = 0; i < 50; i++) {
     const rand1000 = Math.floor(Math.random() * 1000);
     const camp = new Campground({
       location: `${cities[rand1000].city},${cities[rand1000].state}`,
-      title: `${sample(descriptors)}, ${sample(places)}`,
+      title: `${sample(descriptors)} ${sample(places)}`,
     });
     await camp.save();
   }
 };
 
 //returns promise bcas its async ()
-seedDB().then(() => {
-  mongoose.connection.close();
-});
+seedDB();
