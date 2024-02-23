@@ -39,7 +39,7 @@ app.post("/campground", async (req, res) => {
   await campground.save(); //saving it to DB
   res.redirect("/campground");
 });
-//render detail page by the id
+//render show page by the id
 app.get("/campground/:id", async (req, res) => {
   const campground = await Campground.findById(req.params.id);
   res.render("show", { campground });
@@ -53,9 +53,18 @@ app.get("/campground/:id/edit", async (req, res) => {
 
 //put update route
 app.put("/campground/:id", async (req, res) => {
-  const campground = await Campground.findByIdAndUpdate(req.params.id, req.body.campground);
+  const campground = await Campground.findByIdAndUpdate(
+    req.params.id,
+    req.body.campground
+  );
   await campground.save();
   res.redirect(`/campground/${campground._id}`);
+});
+
+app.delete("/campground/:id", async (req, res) => {
+  const {id} = req.params
+  const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
+  res.redirect("/campground");
 });
 
 app.listen("3000", (req, res) => {
