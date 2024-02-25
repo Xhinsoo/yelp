@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
+
 const Campground = require("./models/campground");
 const methodOverride = require("method-override");
 
@@ -17,6 +19,7 @@ mongoose
     console.log("error is:", e);
   });
 
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -53,7 +56,6 @@ app.get("/campground/:id/edit", async (req, res) => {
 
 //put update route
 app.put("/campground/:id", async (req, res) => {
-  
   const campground = await Campground.findByIdAndUpdate(
     req.params.id,
     req.body.campground
@@ -62,9 +64,9 @@ app.put("/campground/:id", async (req, res) => {
   res.redirect(`/campground/${campground._id}`);
 });
 
-//delete 
+//delete
 app.delete("/campground/:id", async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
   const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
   res.redirect("/campground");
 });
