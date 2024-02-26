@@ -11,11 +11,15 @@
       <img class="img-fluid" alt="" src="<%=campground.image %>" />
     </div>
     <div class="col-md-8">
-      <div class="card-body"><h5 class="card-title"><%=campground.title %></h5>
-      <p class="card-text"><%=campground.description %></p>
+      <div class="card-body">
+        <h5 class="card-title"><%=campground.title %></h5>
+        <p class="card-text"><%=campground.description %></p>
+        <p class="card-text">
+          <small class="textmuted"> <%=campground.location %> </small>
+        </p>
+        <a class= "btn btn-primary" href="/campground/<%=campground._id %>">View <%= campground.title %> </a>
       </div>
     </div>
   </div>
 </div>
-<a href="/campground/<%=campground._id %>"><%= campground.title %> </a>
 <% } %>
