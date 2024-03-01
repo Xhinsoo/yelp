@@ -44,8 +44,13 @@ app.post("/campground", async (req, res) => {
 });
 //render show page by the id
 app.get("/campground/:id", async (req, res) => {
-  const campground = await Campground.findById(req.params.id);
-  res.render("show", { campground });
+  try{
+    const campground = await Campground.findById(req.params.id);
+    res.render("show", { campground });
+  }
+  catch(e){
+    res.send("This is the error:", e)
+  }
 });
 
 //render edit page and send put req
