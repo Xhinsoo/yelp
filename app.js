@@ -37,19 +37,22 @@ app.get("/campground/new", (req, res) => {
   res.render("new");
 });
 // posting new camp to db
-app.post("/campground", async (req, res) => {
-  const campground = new Campground(req.body.campground); //making new object using campground class
-  await campground.save(); //saving it to DB
-  res.redirect("/campground");
+app.post("/campground", async (req, res, next) => {
+  try {
+    const campground = new Campground(req.body.campground); //making new object using campground class
+    await campground.save(); //saving it to DB
+    res.redirect("/campground");
+  } catch (e) {
+    next(e);
+  }
 });
 //render show page by the id
 app.get("/campground/:id", async (req, res) => {
-  try{
+  try {
     const campground = await Campground.findById(req.params.id);
     res.render("show", { campground });
-  }
-  catch(e){
-    res.send("This is the error:", e)
+  } catch (e) {
+    res.send("This is the error:", e);
   }
 });
 
@@ -74,6 +77,10 @@ app.delete("/campground/:id", async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
   res.redirect("/campground");
+});
+
+app.use((err, req, res, next) => {
+  res.send("oh boy we have error");
 });
 
 app.listen("3000", (req, res) => {
