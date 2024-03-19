@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 
 const Campground = require("./models/campground");
+const Review = require("./models/review");
 const methodOverride = require("method-override");
 
 app.use(express.urlencoded({ extended: true }));
@@ -79,6 +80,15 @@ app.delete("/campground/:id", async (req, res) => {
   res.redirect("/campground");
 });
 
+app.post("/campgrounds/:id/reviews", async (req, res) => {
+  const campground = await Campground.findById(req.params.id);
+  const review = new Review(req.body.review);
+  console.log(review);
+  campground.reviews.push(review);
+  await review.save();
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`)
+});
 app.use((err, req, res, next) => {
   res.send("oh boy we have error");
 });
