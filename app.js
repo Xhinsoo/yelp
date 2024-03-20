@@ -50,10 +50,11 @@ app.post("/campground", async (req, res, next) => {
 //render show page by the id
 app.get("/campground/:id", async (req, res) => {
   try {
-    const campground = await Campground.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id).populate("reviews");
+    console.log(campground)
     res.render("show", { campground });
   } catch (e) {
-    res.send("This is the error:", e);
+    res.status(status).send("This is the error:", e);
   }
 });
 
