@@ -50,11 +50,13 @@ app.post("/campground", async (req, res, next) => {
 //render show page by the id
 app.get("/campground/:id", async (req, res) => {
   try {
-    const campground = await Campground.findById(req.params.id).populate("reviews");
-    console.log(campground)
+    const campground = await Campground.findById(req.params.id).populate(
+      "reviews"
+    );
+    console.log(campground);
     res.render("show", { campground });
   } catch (e) {
-    res.status(status).send("This is the error:", e);
+    res.status("401").send("This is the error:", e);
   }
 });
 
@@ -81,15 +83,26 @@ app.delete("/campground/:id", async (req, res) => {
   res.redirect("/campground");
 });
 
-app.post("/campgrounds/:id/reviews", async (req, res) => {
+app.post("/campground/:id/reviews", async (req, res) => {
   const campground = await Campground.findById(req.params.id);
   const review = new Review(req.body.review);
-  console.log(review);
+  // console.log(review);
   campground.reviews.push(review);
   await review.save();
   await campground.save();
-  res.redirect(`/campgrounds/${campground._id}`)
+  res.redirect(`/campground/${campground._id}`);
 });
+
+app.delete("/campground/:id/reviews/:reviewId", async (req,res)=>{
+  //$pull operator removes from an existing array all instances of a value or values that match a specified condition
+  const {id, reviewId} = req.params;
+  //using id find the campground, then pass an object which will have $pull operator which will pull reviewID from the reviews array
+  await Campground.findByIdAndUpdate(id,{$pull:{reviews:reviewId}})
+  await Review.findByIdAndDelete(reviewId)
+  res.redirect(`/campground/${id}`)
+  
+})
+
 app.use((err, req, res, next) => {
   res.send("oh boy we have error");
 });
