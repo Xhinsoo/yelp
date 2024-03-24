@@ -25,8 +25,8 @@ CampgroundSchema.post("findOneAndDelete", async function(doc){
       }
     })
   }
-  console.log("deleted")
-  console.log(doc)
+  // console.log("deleted")
+  // console.log(doc)
 })
 
 //mongoose.model accepts 2 arguments, collection name and collection schema
