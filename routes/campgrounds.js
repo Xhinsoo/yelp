@@ -4,7 +4,7 @@ const Campground = require("../models/campground");
 const Review = require("../models/review");
 
 
-
+//home 
 router.get("/", (req, res) => {
   res.render("home");
 });
