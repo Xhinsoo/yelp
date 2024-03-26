@@ -28,6 +28,7 @@ app.set("views", path.join(__dirname, "views"));
 
 
 //setting the route handler prefix to /
+//we can also add /campgrounds prefix to reduce code om router
 app.use("/campground", campgrounds)
 
 
