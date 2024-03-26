@@ -28,7 +28,7 @@ app.set("views", path.join(__dirname, "views"));
 
 
 //setting the route handler prefix to /
-app.use("/", campgrounds)
+app.use("/campground", campgrounds)
 
 
 app.use((err, req, res, next) => {
