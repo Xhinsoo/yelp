@@ -5,3 +5,6 @@ Little bit of data that can be saved in user browser, sent from server,i.e hey b
 Used to remember sessions/ state fullness
 
 http requests are standalone, doesn't know what req was made before. However, with cookie we can define statefullness.
+
+
+MVC: Model, view and controller. App is divided into 3 section. for every entity thetr is a model, which is displayed using view. Controller decides which view to display.
