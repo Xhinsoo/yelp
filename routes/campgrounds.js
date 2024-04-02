@@ -17,6 +17,7 @@ router.post("/", async (req, res, next) => {
   try {
     const campground = new Campground(req.body.campground); //making new object using campground class
     await campground.save(); //saving it to DB
+    req.flash("success", "Successfully made a new campground");
     res.redirect("/campground");
   } catch (e) {
     next(e);
@@ -28,10 +29,10 @@ router.get("/:id", async (req, res) => {
     const campground = await Campground.findById(req.params.id).populate(
       "reviews"
     );
-    console.log(campground);
-    res.render("show", { campground });
+    // console.log(campground);
+    res.render("show", { campground, msg: req.flash("success") });
   } catch (e) {
-    res.status("401").send("This is the error:", e);
+    res.status(401).send(e);
   }
 });
 
@@ -57,7 +58,5 @@ router.delete("/:id", async (req, res) => {
   const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
   res.redirect("/campground");
 });
-
-
 
 module.exports = router;

@@ -1,5 +1,8 @@
 const express = require("express");
-const router = express.Router();
+//having multiple params on route gives null issues, mergeParams true fixes it
+const router = express.Router({mergeParams: true}); 
+const Campground = require("../models/campground");
+const Review = require("../models/review");
 
 //updating campground reviews
 router.post("/", async (req, res) => {
