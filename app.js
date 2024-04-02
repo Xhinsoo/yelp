@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 //returns a new router object
 const campgrounds = require("./routes/campgrounds");
+const reviews = require("./routes/reviews");
 
 const Campground = require("./models/campground");
 const Review = require("./models/review");
@@ -30,6 +31,7 @@ app.set("views", path.join(__dirname, "views"));
 //setting the route handler prefix to /
 //we can also add /campgrounds prefix to reduce code om router
 app.use("/campground", campgrounds)
+app.use("/campground/:id/reviews", reviews)
 
 
 app.use((err, req, res, next) => {
