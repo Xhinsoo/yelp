@@ -56,7 +56,9 @@ router.put("/:id", async (req, res) => {
 //delete campground
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save  res.redirect("/campground");
+  const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
+  req.flash("success", "Successfully deleted campground")
+  res.redirect("/campground");
 });
 
 module.exports = router;

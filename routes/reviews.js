@@ -1,6 +1,6 @@
 const express = require("express");
 //having multiple params on route gives null issues, mergeParams true fixes it
-const router = express.Router({mergeParams: true}); 
+const router = express.Router({ mergeParams: true });
 const Campground = require("../models/campground");
 const Review = require("../models/review");
 
@@ -12,6 +12,7 @@ router.post("/", async (req, res) => {
   campground.reviews.push(review);
   await review.save();
   await campground.save();
+  req.flash("success", "Successfully posted review");
   res.redirect(`/campground/${campground._id}`);
 });
 
@@ -22,6 +23,7 @@ router.delete("/:reviewId", async (req, res) => {
   //using id find the campground, then pass an object which will have $pull operator which will pull reviewID from the reviews array
   await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
   await Review.findByIdAndDelete(reviewId);
+  req.flash("success", "Successfully deleted review ");
   res.redirect(`/campground/${id}`);
 });
 
