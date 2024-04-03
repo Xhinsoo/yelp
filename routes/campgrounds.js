@@ -30,7 +30,7 @@ router.get("/:id", async (req, res) => {
       "reviews"
     );
     // console.log(campground);
-    res.render("show", { campground, msg: req.flash("success") });
+    res.render("show", { campground});
   } catch (e) {
     res.status(401).send(e);
   }
@@ -49,14 +49,14 @@ router.put("/:id", async (req, res) => {
     req.body.campground
   );
   await campground.save();
+  req.flash("success", "Successfully edited campground")
   res.redirect(`/campground/${campground._id}`);
 });
 
 //delete campground
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
-  res.redirect("/campground");
+  const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save  res.redirect("/campground");
 });
 
 module.exports = router;
