@@ -10,3 +10,11 @@ MVC: Model, view and controller. App is divided into 3 section. for every entity
 
 flash
 npm i connect-flash
+
+
+
+---
+passports package
+npm i passport passport-local passport-local-mongoose
+
+Adds scalable authentication to your app

@@ -25,15 +25,12 @@ router.post("/", async (req, res, next) => {
 });
 //render show page by the id
 router.get("/:id", async (req, res) => {
-  try {
-    const campground = await Campground.findById(req.params.id).populate(
-      "reviews"
-    );
-    // console.log(campground);
-    res.render("show", { campground});
-  } catch (e) {
-    res.status(401).send(e);
+  const campground = await Campground.findById(req.params.id).populate("reviews" );
+  if (!campground) {
+    req.flash("error", "Cannot find that campground");
+    return res.redirect("/campground");
   }
+  res.render("show", { campground });
 });
 
 //render edit page and send put req
@@ -49,7 +46,7 @@ router.put("/:id", async (req, res) => {
     req.body.campground
   );
   await campground.save();
-  req.flash("success", "Successfully edited campground")
+  req.flash("success", "Successfully edited campground");
   res.redirect(`/campground/${campground._id}`);
 });
 
@@ -57,7 +54,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
-  req.flash("success", "Successfully deleted campground")
+  req.flash("success", "Successfully deleted campground");
   res.redirect("/campground");
 });
 

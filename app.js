@@ -8,8 +8,11 @@ const campgrounds = require("./routes/campgrounds");
 const reviews = require("./routes/reviews");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 const Campground = require("./models/campground");
+const User = require("./models/user")
 const Review = require("./models/review");
 const methodOverride = require("method-override");
 
@@ -27,8 +30,18 @@ const sessionConfig = {
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
+//session is before passport.session()
 app.use(session(sessionConfig));
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+//generates fn() that is used in Passport local strategy
+passport.use(new LocalStrategy(User.authenticate()));
+//passport local mongoose plugin methods
+//generates fn() that will serialise users into session
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/yelp-camp")
@@ -49,8 +62,14 @@ app.use((req, res, next) => {
   //whatever is in flash("success") key, will be accessed via res.locals.success
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  next()
+  next();
 });
+
+app.get("/fakeUser",async(req,res,next)=>{
+  const user = new User({email: "chin@gmail.com", username:"chin"});
+  const newUser = await User.register(user, "chicken");
+  res.send(newUser)
+})
 app.use("/campground", campgrounds);
 app.use("/campground/:id/reviews", reviews);
 
