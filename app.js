@@ -36,8 +36,11 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
+//passport please use localstrategy, and for local strategy authentication method will be found in user.authenticate()
+//passport local mongoose automatically adds static methods to User model. i.e:authenticate(), serialiseUser() and so on.
 //generates fn() that is used in Passport local strategy
 passport.use(new LocalStrategy(User.authenticate()));
+
 //passport local mongoose plugin methods
 //generates fn() that will serialise users into session
 passport.serializeUser(User.serializeUser());
@@ -67,6 +70,7 @@ app.use((req, res, next) => {
 
 app.get("/fakeUser",async(req,res,next)=>{
   const user = new User({email: "chin@gmail.com", username:"chin"});
+  //adds new user object and adds to the DB
   const newUser = await User.register(user, "chicken");
   res.send(newUser)
 })

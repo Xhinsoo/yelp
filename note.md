@@ -11,10 +11,15 @@ MVC: Model, view and controller. App is divided into 3 section. for every entity
 flash
 npm i connect-flash
 
-
-
 ---
+
 passports package
 npm i passport passport-local passport-local-mongoose
 
 Adds scalable authentication to your app
+Passport local mongoose will add a username, hash and salt f"FIELD" to store username, hashed password and salt value.
+
+Passport local mongoose automatically adds static methods to User model. ie: authenticate(), serialiseUser(), register() and so on.
+
+
+serialization means: how to store user into a session

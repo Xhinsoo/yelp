@@ -10,7 +10,9 @@ const UserSchema = new Schema({
   },
 });
 
-//this will add unique password and username field to our schema
+//this will add on unique password and username field to our schema
 UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", UserSchema);
+
+
