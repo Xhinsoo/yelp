@@ -12,7 +12,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
 const Campground = require("./models/campground");
-const User = require("./models/user")
+const User = require("./models/user");
+const userRoutes = require("./routes/users")
 const Review = require("./models/review");
 const methodOverride = require("method-override");
 
@@ -59,8 +60,7 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-//setting the route handler prefix to /
-//we can also add /campgrounds prefix to reduce code om router
+//setting the route handler prefix to.we can also add /campgrounds prefix to reduce code om router
 app.use((req, res, next) => {
   //whatever is in flash("success") key, will be accessed via res.locals.success
   res.locals.success = req.flash("success");
@@ -76,6 +76,7 @@ app.get("/fakeUser",async(req,res,next)=>{
 })
 app.use("/campground", campgrounds);
 app.use("/campground/:id/reviews", reviews);
+app.use("/", userRoutes);
 
 app.use((err, req, res, next) => {
   res.send("oh boy we have error");

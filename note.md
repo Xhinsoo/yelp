@@ -19,7 +19,17 @@ npm i passport passport-local passport-local-mongoose
 Adds scalable authentication to your app
 Passport local mongoose will add a username, hash and salt f"FIELD" to store username, hashed password and salt value.
 
-Passport local mongoose automatically adds static methods to User model. ie: authenticate(), serialiseUser(), register() and so on.
+Passport local mongoose automatically adds static methods to User model. ie: authenticate(), serializeUser(), register() and so on.
 
 
 serialization means: how to store user into a session
+
+These packages gives us methods that we would have to otherwise define ourself.
+
+//authenticate using local strategy. redirect to /login on failure, flash failure message if failure
+--
+router.post("/login",passport.authenticate("local",{failureFlash:true, failureRedirect:"/login"}),(req.res)=>{
+code block
+})
+--
+if we reach code block, then it means somebody was authenticated
