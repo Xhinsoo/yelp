@@ -33,3 +33,9 @@ code block
 })
 --
 if we reach code block, then it means somebody was authenticated
+--
+
+Therefore, make sure to update your /logout route in the routes/users.js code so it looks like this:
+
+---
+req.user contains information about the user. We don't have to look into session even though its stored in there.

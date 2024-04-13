@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campground");
 const Review = require("../models/review");
+const {isLoggedIn} = require("../middleware");
 
 //index page
 router.get("/", async (req, res) => {
@@ -9,11 +10,11 @@ router.get("/", async (req, res) => {
   res.render("index", { campgrounds });
 });
 //render new page
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn,(req, res) => {
   res.render("new");
 });
 // posting new camp to db
-router.post("/", async (req, res, next) => {
+router.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const campground = new Campground(req.body.campground); //making new object using campground class
     await campground.save(); //saving it to DB
@@ -24,8 +25,10 @@ router.post("/", async (req, res, next) => {
   }
 });
 //render show page by the id
-router.get("/:id", async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate("reviews" );
+router.get("/:id", isLoggedIn, isLoggedIn, async (req, res) => {
+  const campground = await Campground.findById(req.params.id).populate(
+    "reviews"
+  );
   if (!campground) {
     req.flash("error", "Cannot find that campground");
     return res.redirect("/campground");
@@ -34,13 +37,13 @@ router.get("/:id", async (req, res) => {
 });
 
 //render edit page and send put req
-router.get("/:id/edit", async (req, res) => {
+router.get("/:id/edit", isLoggedIn, async (req, res) => {
   const campground = await Campground.findById(req.params.id);
   res.render("edit", { campground });
 });
 
 //put update route
-router.put("/:id", async (req, res) => {
+router.put("/:id", isLoggedIn, async (req, res) => {
   const campground = await Campground.findByIdAndUpdate(
     req.params.id,
     req.body.campground
@@ -51,7 +54,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete campground
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isLoggedIn, async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findByIdAndDelete(id); //this  method doesn't need .save
   req.flash("success", "Successfully deleted campground");
