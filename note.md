@@ -39,3 +39,6 @@ Therefore, make sure to update your /logout route in the routes/users.js code so
 
 ---
 req.user contains information about the user. We don't have to look into session even though its stored in there.
+
+req.login method enables login after registering
+req.logout method enables logout

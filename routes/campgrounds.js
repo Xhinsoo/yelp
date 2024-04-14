@@ -15,20 +15,15 @@ router.get("/new", isLoggedIn,(req, res) => {
 });
 // posting new camp to db
 router.post("/", isLoggedIn, async (req, res, next) => {
-  try {
     const campground = new Campground(req.body.campground); //making new object using campground class
+    campground.author = req.user._id;
     await campground.save(); //saving it to DB
     req.flash("success", "Successfully made a new campground");
     res.redirect("/campground");
-  } catch (e) {
-    next(e);
-  }
 });
 //render show page by the id
 router.get("/:id", isLoggedIn, isLoggedIn, async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate(
-    "reviews"
-  );
+  const campground = await Campground.findById(req.params.id).populate("reviews").populate("author");
   if (!campground) {
     req.flash("error", "Cannot find that campground");
     return res.redirect("/campground");

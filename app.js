@@ -62,6 +62,7 @@ app.set("views", path.join(__dirname, "views"));
 
 //setting the route handler prefix to.we can also add /campgrounds prefix to reduce code om router
 app.use((req, res, next) => {
+  console.log(req.session)
   res.locals.currentUser = req.user;
   //whatever is in flash("success") key, will be accessed via res.locals.success
   res.locals.success = req.flash("success");
