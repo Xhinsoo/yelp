@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campground");
 const Review = require("../models/review");
-const {isLoggedIn} = require("../middleware");
+const { isLoggedIn } = require("../middleware");
 
 //index page
 router.get("/", async (req, res) => {
@@ -10,51 +10,59 @@ router.get("/", async (req, res) => {
   res.render("index", { campgrounds });
 });
 //render new page
-router.get("/new", isLoggedIn,(req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("new");
 });
 // posting new camp to db
 router.post("/", isLoggedIn, async (req, res, next) => {
-    const campground = new Campground(req.body.campground); //making new object using campground class
-    campground.author = req.user._id;
-    await campground.save(); //saving it to DB
-    req.flash("success", "Successfully made a new campground");
-    res.redirect("/campground");
+  const campground = new Campground(req.body.campground); //making new object using campground class
+  campground.author = req.user._id;
+  await campground.save(); //saving it to DB
+  req.flash("success", "Successfully made a new campground");
+  res.redirect("/campground");
 });
 //render show page by the id
-router.get("/:id", isLoggedIn, isLoggedIn, async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate("reviews").populate("author");
-  if (!campground) {
-    req.flash("error", "Cannot find that campground");
-    return res.redirect("/campground");
+router.get("/:id",  isLoggedIn, async (req, res, next) => {
+  try {
+    const campground = await Campground.findById(req.params.id)
+      .populate("reviews")
+      .populate("author");
+    if (!campground) {
+      req.flash("error", "Cannot find that campground");
+      return res.redirect("/campground");
+    }
+    res.render("show", { campground });
+  } catch (e) {
+    next(e);
   }
-  res.render("show", { campground });
 });
 
 //render edit page and send put req
 router.get("/:id/edit", isLoggedIn, async (req, res) => {
-  const {id} =req.params;
+  const { id } = req.params;
   const campground = await Campground.findById(id);
-  if(!campground){
-    req.flash("error","cannot find that campground");
+  if (!campground) {
+    req.flash("error", "cannot find that campground");
     return res.redirect("/campground");
   }
-  if(!campground.author.equals(req.user._id)){
-    req.flash("error","you do not have permission")
-    return res.redirect(`/campground/${id}`)
+  if (!campground.author.equals(req.user._id)) {
+    req.flash("error", "you do not have permission");
+    return res.redirect(`/campground/${id}`);
   }
   res.render("edit", { campground });
 });
 
 //put update route
 router.put("/:id", isLoggedIn, async (req, res) => {
-  const {id} = req.query;
+  const { id } = req.query;
   const campground = await Campground.findById(id);
-  if(!campground.author.equals(req.user._id)){
-    req.flash("error","you do not have permission")
-    return res.redirect(`/campground/${id}`)
+  if (!campground.author.equals(req.user._id)) {
+    req.flash("error", "you do not have permission");
+    return res.redirect(`/campground/${id}`);
   }
-  const camp = await Campground.findByIdAndUpdate(id, {...req.body.campground});
+  const camp = await Campground.findByIdAndUpdate(id, {
+    ...req.body.campground,
+  });
   req.flash("success", "Successfully edited campground");
   res.redirect(`/campground/${campground._id}`);
 });
