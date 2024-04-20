@@ -80,8 +80,9 @@ app.use("/campground/:id/reviews", reviews);
 app.use("/", userRoutes);
 
 app.use((err, req, res, next) => {
-  res.send("oh boy we have error");
-});
+  const {status = 500, message="Something went wrong!"} = err;
+  res.status(status).send(message); 
+})
 
 app.listen("3000", (req, res) => {
   console.log("listening to port 3000");

@@ -10,10 +10,11 @@
   ></button>
 </div>
 
-<% } %> <%if(error.length){%>
+<% } %> 
+<%if(error.length){%>
 <!-- //console.dir(success) shows us that success is present and empty, that why use length to check for presence -->
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%= success %>
+  <%= error%>
   <button
     type="button"
     class="btn-close"

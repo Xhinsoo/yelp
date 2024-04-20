@@ -5,6 +5,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 
 const { storeReturnTo } = require("../middleware");
+
 router.get("/register", (req, res) => {
   res.render("users/register");
 });
@@ -22,7 +23,7 @@ router.post("/register", async (req, res) => {
       res.redirect("/campground");
     });
   } catch (e) {
-    req.flash("error", e);
+    req.flash("error", e.message);
     res.redirect("register");
   }
 });
@@ -31,24 +32,23 @@ router.get("/login", (req, res) => {
   res.render("users/login");
 });
 //authenticate using local strategy. redirect to /login on failure, flash failure message if failure
-router.post(
-  "/login",
-  storeReturnTo,
-  passport.authenticate("local", {
-    failureFlash: true,
-    failureRedirect: "/login",
-  }),
-  (req, res) => {
-    req.flash("success", "welcome back");
-    const redirectUrl = res.locals.returnTo || "/campground";
-    delete req.session.returnTo;
-    res.redirect(redirectUrl);
-
+router.post("/login",storeReturnTo,passport.authenticate("local", {failureFlash: true,
+    failureRedirect: "/login",}),(req, res) => {
+    try{
+      req.flash("success", "welcome back");
+      const redirectUrl = res.locals.returnTo || "/campground";
+      delete req.session.returnTo;
+      res.redirect(redirectUrl);
+    }
+    catch(e){
+      req.flash("error", e.message);
+    }
   }
+
 );
 
 router.get("/logout", (req, res, next) => {
-  //logout requires cb () as argument
+  //logout requires cb () as argument since new update
   req.logout(function (err) {
     if (err) {
       return next(err);
