@@ -3,12 +3,16 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const Campground = require("../models/campground");
 const Review = require("../models/review");
+const {isLoggedIn} = require("../middleware")
+
+
 
 //updating campground reviews
-router.post("/", async (req, res) => {
+router.post("/", isLoggedIn, async (req, res) => {
   const campground = await Campground.findById(req.params.id);
   const review = new Review(req.body.review);
-  // console.log(review);
+  review.author = req.user._id;
+  console.log(review.author);
   campground.reviews.push(review);
   await review.save();
   await campground.save();
@@ -17,7 +21,7 @@ router.post("/", async (req, res) => {
 });
 
 //delete reviews
-router.delete("/:reviewId", async (req, res) => {
+router.delete("/:reviewId", isLoggedIn, async (req, res) => {
   //$pull operator removes from an existing array all instances of a value or values that match a specified condition
   const { id, reviewId } = req.params;
   //using id find the campground, then pass an object which will have $pull operator which will pull reviewID from the reviews array
