@@ -5,24 +5,25 @@ const Review = require("../models/review");
 const { isLoggedIn, isAuthor } = require("../middleware");
 const campgrounds = require("../controllers/campgrounds");
 
-//index page
-router.get("/", campgrounds.index);
+
+router.route("/")
+    .get(campgrounds.index) //index
+    .post(isLoggedIn, campgrounds.createCampground); // posting new camp to db
 
 //render new page
 router.get("/new", isLoggedIn, campgrounds.renderNewForm);
-// posting new camp to db
-router.post("/", isLoggedIn, campgrounds.createCampground);
 
-//render show page by the id
-router.get("/:id", campgrounds.showCampground);
+router.route("/:id")
+    //render show page by the id
+    .get(campgrounds.showCampground)
+    //put update route
+    .put(isLoggedIn, isAuthor, campgrounds.updateCampground)
+    //delete campground
+    .delete(isLoggedIn, isAuthor, campgrounds.deleteCampground);
 
 //render edit page and send put req
 router.get("/:id/edit", isLoggedIn, isAuthor, campgrounds.renderEditForm);
 
-//put update route
-router.put("/:id", isLoggedIn, isAuthor, campgrounds.updateCampground);
 
-//delete campground
-router.delete("/:id", isLoggedIn, isAuthor, campgrounds.deleteCampground);
 
 module.exports = router;
