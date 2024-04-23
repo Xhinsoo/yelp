@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
     //redirect to login after successful registration
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      req.flash("success", "welcome to yelpcamp!");
+      req.flash("success", "Welcome to Yelpcamp!");
       res.redirect("/campground");
     });
   } catch (e) {

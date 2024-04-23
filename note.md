@@ -42,3 +42,6 @@ req.user contains information about the user. We don't have to look into session
 
 req.login method enables login after registering
 req.logout method enables logout
+
+--
+MVC: Model, view and controllers (rendering views and working with models)
