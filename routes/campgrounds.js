@@ -21,6 +21,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 router.post("/", isLoggedIn, async (req, res, next) => {
   const campground = new Campground(req.body.campground); //making new object using campground class
   campground.author = req.user._id;
+  console.log(campground.author.username)
   await campground.save(); //saving it to DB
   req.flash("success", "Successfully made a new campground");
   res.redirect("/campground");
