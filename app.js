@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -13,7 +18,7 @@ const LocalStrategy = require("passport-local");
 
 const Campground = require("./models/campground");
 const User = require("./models/user");
-const userRoutes = require("./routes/users")
+const userRoutes = require("./routes/users");
 const Review = require("./models/review");
 const methodOverride = require("method-override");
 
@@ -69,20 +74,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/fakeUser",async(req,res,next)=>{
-  const user = new User({email: "chin@gmail.com", username:"chin"});
+app.get("/fakeUser", async (req, res, next) => {
+  const user = new User({ email: "chin@gmail.com", username: "chin" });
   //adds new user object and adds to the DB
   const newUser = await User.register(user, "chicken");
-  res.send(newUser)
-})
+  res.send(newUser);
+});
 app.use("/campground", campgrounds);
 app.use("/campground/:id/reviews", reviews);
 app.use("/", userRoutes);
 
 app.use((err, req, res, next) => {
-  const {status = 500, message="Something went wrong!"} = err;
-  res.status(status).send(message); 
-})
+  const { status = 500, message = "Something went wrong!" } = err;
+  res.status(status).send(message);
+});
 
 app.listen("3000", (req, res) => {
   console.log("listening to port 3000");
