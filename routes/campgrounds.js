@@ -4,12 +4,16 @@ const Campground = require("../models/campground"); //Campground object that con
 const Review = require("../models/review");
 const { isLoggedIn, isAuthor } = require("../middleware");
 const campgrounds = require("../controllers/campgrounds");
-
+const multer = require("multer");
+const upload = multer({dest: "uploads/"});
 
 router.route("/")
     .get(campgrounds.index) //index
-    .post(isLoggedIn, campgrounds.createCampground); // posting new camp to db
-
+    // .post(isLoggedIn, campgrounds.createCampground); // posting new camp to db
+    .post(upload.array("image"),(req,res)=>{
+        console.log(req.body, req.files)
+        res.send("it work")
+    })
 //render new page
 router.get("/new", isLoggedIn, campgrounds.renderNewForm);
 
