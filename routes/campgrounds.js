@@ -5,7 +5,8 @@ const Review = require("../models/review");
 const { isLoggedIn, isAuthor } = require("../middleware");
 const campgrounds = require("../controllers/campgrounds");
 const multer = require("multer");
-const upload = multer({dest: "uploads/"});
+const {storage} = require("../cloudinary") //node automatically looks for index file
+const upload = multer({storage});
 
 router.route("/")
     .get(campgrounds.index) //index
