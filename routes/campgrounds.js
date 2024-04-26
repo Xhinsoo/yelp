@@ -10,11 +10,13 @@ const upload = multer({storage});
 
 router.route("/")
     .get(campgrounds.index) //index
-    // .post(isLoggedIn, campgrounds.createCampground); // posting new camp to db
-    .post(upload.array("image"),(req,res)=>{
-        console.log(req.body, req.files)
-        res.send("it work")
-    })
+    .post(isLoggedIn, upload.array("image"), campgrounds.createCampground); // posting new camp to db
+    
+    // .post(upload.array("image"),(req,res)=>{
+    //     console.log(req.body, req.files)
+    //     res.send("it work")
+    // })
+
 //render new page
 router.get("/new", isLoggedIn, campgrounds.renderNewForm);
 

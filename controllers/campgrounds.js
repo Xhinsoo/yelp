@@ -11,9 +11,13 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createCampground = async (req, res, next) => {
   const campground = new Campground(req.body.campground); //making new object using campground class
+  //for each F, return an object. for implicit return need curly braces
+  //that makes us array which contains simple objects (url and file name)
+  //req.file = multer adds .file to req
+  campground.image = req.files.map(f => ({url: f.path, filename: f.filename}))
   campground.author = req.user._id;
-  console.log(campground.author.username);
-  await campground.save(); //saving it to DB
+  await campground.save();
+  console.log(campground)
   req.flash("success", "Successfully made a new campground");
   res.redirect("/campground");
 };
