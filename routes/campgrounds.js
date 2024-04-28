@@ -24,7 +24,7 @@ router.route("/:id")
     //render show page by the id
     .get(campgrounds.showCampground)
     //put update route
-    .put(isLoggedIn, isAuthor, campgrounds.updateCampground)
+    .put(isLoggedIn, isAuthor, upload.array("image"), campgrounds.updateCampground)
     //delete campground
     .delete(isLoggedIn, isAuthor, campgrounds.deleteCampground);
 

@@ -17,7 +17,7 @@ module.exports.createCampground = async (req, res, next) => {
   campground.image = req.files.map(f => ({url: f.path, filename: f.filename}))
   campground.author = req.user._id;
   await campground.save();
-  console.log(campground)
+  console.log(campground.image)
   req.flash("success", "Successfully made a new campground");
   res.redirect("/campground");
 };
@@ -58,6 +58,10 @@ module.exports.updateCampground = async (req, res) => {
   const campground = await Campground.findByIdAndUpdate(id, {
     ...req.body.campground,
   });
+  const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
+  campground.image.push(...imgs)
+  campground.save()
+
   req.flash("success", "Successfully edited campground");
   res.redirect(`/campground/${campground._id}`);
 };

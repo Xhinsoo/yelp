@@ -45,3 +45,14 @@ req.logout method enables logout
 
 --
 MVC: Model, view and controllers (rendering views and working with models)
+
+
+---
+const img = req.files.map(f => ({url: f.path, filename: f.filename}))
+this gives us an array
+
+campground.image.push(req.files.map(f => ({url: f.path, filename: f.filename}))) : this causes array to be pushed into another array. It wont pass our validation because, we predefined array to be "strings"
+
+so to solve this, take the items of .map array and spread it into campground.image
+
+campground.image.push(...img)
